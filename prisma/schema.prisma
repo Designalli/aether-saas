@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Contact {
+  id        String   @id
+  name      String
+  email     String
+  company   String
+  stage     String
+  value     Int
+  notes     String
+  createdAt DateTime @default(now())
+}
+
+model CalendarEvent {
+  id    String  @id
+  title String
+  date  String
+  time  String
+  type  String
+  with  String?
+}
+
+model Thread {
+  id        String    @id
+  name      String
+  last      String
+  encrypted Boolean   @default(true)
+  messages  Message[]
+}
+
+model Message {
+  id               String   @id
+  threadId         String
+  thread           Thread   @relation(fields: [threadId], references: [id])
+  from             String
+  ciphertext       String
+  iv               String
+  plaintextPreview String?
+  createdAt        DateTime @default(now())
+}
